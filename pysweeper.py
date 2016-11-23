@@ -29,8 +29,9 @@ class Cell(object):
     def reveal(self):
         self.revealed = True
     
-    def is_revealed(self)
+    def is_revealed(self):
         return revealed
+
 
 class Grid(object):
 
@@ -43,9 +44,9 @@ class Grid(object):
 
     def populate_grid(self):
         self.grid_matrix = []
-        for row_position in xrange(row_size):
-            self.grid_matrix[row_position] = []
-            for col_position in xrange(col_size):
+        for row_position in xrange(self.row_size):
+            self.grid_matrix.append([])
+            for col_position in xrange(self.col_size):
                 self.grid_matrix[row_position].append(Cell())
 
     def plant_bombs(self):
@@ -55,6 +56,7 @@ class Grid(object):
             rand_col = random.randint(0, self.col_size-1)
             if not self.grid_matrix[rand_row][rand_col].bomb_check():
                 self.grid_matrix[rand_row][rand_col].set_bomb()
+                print rand_row, rand_col, self.grid_matrix[rand_row][rand_col].bomb_check()
                 self.bombs_not_planted -= 1
 
     def calculate_neighbor(self, row, col):
@@ -73,5 +75,18 @@ class Grid(object):
     def create_board(self):
         self.populate_grid()
         self.plant_bombs()
-        [calculate_neighbor(r,c) for r in xrange(self.row_size) for c in
+        [self.calculate_neighbor(r,c) for r in xrange(self.row_size) for c in
                 xrange(self.col_size)]
+
+    def return_bombs(self):
+        #bomb_matrix = [[False for r in xrange(self.row_size)] for c in xrange(self.col_size)]
+        for i  in xrange(self.row_size):
+            for j in xrange(self.col_size):
+                print i, j, self.grid_matrix[i][j].bomb_check()
+                #bomb_matrix[i][j] = cell.bomb_check()
+
+        #return bomb_matrix
+
+
+if __name__ == '__main__':
+    pass

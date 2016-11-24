@@ -16,10 +16,24 @@ print bombs
 ''' 
 
 grid = Grid()
-grid.create_board()
 
-grid.return_bombs()
+bombs, neighbors = grid.return_bombs()
 
+n_dict = grid.get_neighbor_dict()
+
+''' 
+for i, j in n_dict.iteritems():
+    print i, j
+'''
+#for i in bombs:
+#    print i
+#print "---------"
+
+for j in neighbors:
+    print "+-"*8+"+"
+    print "|" + "|".join([str(i) for i in j]) + "|"
+    
+print "+-"*8+"+"
 window = curses.initscr()
 curses.endwin()
 

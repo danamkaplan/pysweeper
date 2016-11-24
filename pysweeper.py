@@ -40,7 +40,8 @@ class Grid(object):
         self.col_size = col_size
         self.bombs_remaining = bomb_amount
         self.bombs_not_planted = bomb_amount
-        self.create_board()
+        self.neighbor_dict = {}
+
 
     def populate_grid(self):
         self.grid_matrix = []
@@ -56,37 +57,69 @@ class Grid(object):
             rand_col = random.randint(0, self.col_size-1)
             if not self.grid_matrix[rand_row][rand_col].bomb_check():
                 self.grid_matrix[rand_row][rand_col].set_bomb()
-                print rand_row, rand_col, self.grid_matrix[rand_row][rand_col].bomb_check()
                 self.bombs_not_planted -= 1
+    def get_cell(self, row, col)
 
-    def calculate_neighbor(self, row, col):
+
+    def create_neighbors(self, row, col):
+        self.neighbor_dict[(row, col)] = []
+        # make a tuple dictionary of all neighbors
+        # {
+        # (r,c): [(r1,c2), (r1, c2)]
+        # }
+        
+        for n_row in xrange(row-1, row+2):
+            for n_col in xrange(col-1, col+2):
+                if n_row in range(self.row_size) and\
+                    n_col in range(self.col_size) and not\
+                    (n_row == row and n_col == col):
+                    self.neighbor_dict[(row, col)].append((n_row, n_col))
+
+    def calculate_neighbors(self, row, col):
         neighbor_counter = 0 
-        for n_row in xrange(row-1, 2):
-            for n_col in xrange(col-1, 2):
-                try: 
-                    if self.grid_matrix[n_row][n_col].bomb_check():
-                        neighbor_counter += 1
-                except IndexError:
-                    continue
-
-        if not self.grid_matrix[row][col].bomb_check():
-            self.grid_matrix[row][col].set_neighbors(neighbor_counter)
+        for n_cell in self.neighbor_dict[(row,col)]:
+            if self.grid_matrix[n_cell[0]][n_cell[1]].bomb_check():
+                neighbor_counter += 1
+        self.grid_matrix[row][col].set_neighbors(neighbor_counter)
 
     def create_board(self):
         self.populate_grid()
         self.plant_bombs()
-        [self.calculate_neighbor(r,c) for r in xrange(self.row_size) for c in
-                xrange(self.col_size)]
+        for r in xrange(self.row_size):
+            #print "loop", r
+            for c in xrange(self.col_size):
+                #print "loop", c
+                self.create_neighbors(r,c) 
+                self.calculate_neighbors(r,c)
 
     def return_bombs(self):
-        #bomb_matrix = [[False for r in xrange(self.row_size)] for c in xrange(self.col_size)]
+        bomb_matrix = [[False for r in xrange(self.row_size)] for c in xrange(self.col_size)]
+        n_matrix = [[False for r in xrange(self.row_size)] for c in xrange(self.col_size)]
         for i  in xrange(self.row_size):
             for j in xrange(self.col_size):
-                print i, j, self.grid_matrix[i][j].bomb_check()
-                #bomb_matrix[i][j] = cell.bomb_check()
+                bomb_matrix[i][j] = self.grid_matrix[i][j].bomb_check()
+                n_matrix[i][j] = self.grid_matrix[i][j].get_neighbors()
 
-        #return bomb_matrix
+        return (bomb_matrix, n_matrix)
+    def flip_cell(self, row, col):
+        pass
 
+    def draw_grid(self):
+        pass
+    def get_neighbor_dict(self):
+        return self.neighbor_dict
+
+
+class Game(object):
+    def __init__(self):
+        pass
+    
+    def create_game(self):
+        grid = Grid()
+        grid.create_board()
+    #flip a cell
+    #flag a cell
+    #redraw screen
 
 if __name__ == '__main__':
     pass

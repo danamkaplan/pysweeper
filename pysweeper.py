@@ -58,7 +58,9 @@ class Grid(object):
             if not self.grid_matrix[rand_row][rand_col].bomb_check():
                 self.grid_matrix[rand_row][rand_col].set_bomb()
                 self.bombs_not_planted -= 1
-    def get_cell(self, row, col)
+    
+    def get_cell(self, row, col):
+        return self.grid_matrix[row][col]
 
 
     def create_neighbors(self, row, col):

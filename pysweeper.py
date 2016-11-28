@@ -23,7 +23,7 @@ class Cell(object):
     def set_flag(self):
         self.flag = True
 
-    def get_flag(self):
+    def is_flag(self):
         return self.flag
 
     def reveal(self):
@@ -35,11 +35,11 @@ class Cell(object):
 
 class Grid(object):
 
-    def __init__(self, row_size=8, col_size=8, bomb_amount=9):
+    def __init__(self, row_size=8, col_size=8, bombs=9):
         self.row_size = row_size
         self.col_size = col_size
-        self.bombs_remaining = bomb_amount
-        self.bombs_not_planted = bomb_amount
+        self.bombs_remaining = bombs
+        self.bombs_not_planted = bombs
         self.neighbor_dict = {}
 
 
@@ -103,11 +103,30 @@ class Grid(object):
                 n_matrix[i][j] = self.grid_matrix[i][j].get_neighbors()
 
         return (bomb_matrix, n_matrix)
-    def flip_cell(self, row, col):
-        pass
+
+    def click_cell(self, row, col):
+        if self.grid_matrix[row][col].bomb_check():
+            #end game
+            pass
+        self.grid_matrix[row][col].reveal()
+        
 
     def draw_grid(self):
-        pass
+        # displays each cells status
+        drawn_grid = []
+        for row in xrange(self.row_size):
+            drawn_grid.append([])
+            for col in xrange(self.col_size):
+                cell = self.grid_matrix()
+                if cell[row][col].is_flag():
+                    draw_grid[row].append("F")        
+                elif cell[row][col].is_revealed():
+                    drawn_grid[row].append(str(cell[row][col].get_neighbors()))
+                else:
+                    drawn_grid[row].append("#")
+
+        return drawn_grid
+
     def get_neighbor_dict(self):
         return self.neighbor_dict
 
@@ -116,12 +135,52 @@ class Game(object):
     def __init__(self):
         pass
     
-    def create_game(self):
-        grid = Grid()
-        grid.create_board()
-    #flip a cell
-    #flag a cell
-    #redraw screen
+    def create_game(self, row=8, col=8, bombs=9):
+        self.row = row
+        self.col = col
+        self.bombs = bombs
+        self.finished = False
+        
+        self.grid = Grid()
+
+
+        self.grid.create_board(row, column)
+
+    def click_cell(self, row, col):
+        
+
+    
+    def flag_cell(self, row, col):
+        pass
+    
+    def draw_screen(self):
+        print "+-"*self.row+"+"
+        screen = self.grid.draw_grid()
+        for row in self.grid.draw_grid():
+            print "|" + "|".join([str(i) if i != 0 else " " for i in row]) + "|"
+        print "+-"*self.row+"+"
+        self.control()
+
+
+    def play_game(self):
+        while not self.finished:
+            pass
+
+            
+    def control(self):
+        action = raw_input("(C)lick or (F)lag cell?: ").lower()
+        if action not in ["f", "c"]:
+            "Not a choice."
+            return self.control()
+        row = raw_input("Which cell row?(Starting at 0): ")
+        col = raw_input("Which cell column?(Starting at 0): ")
+        if action == "f":
+            self.grid.flag_cell(row, col)
+        elif action == "c":
+            self.grid.click_cell(row, col)
+
+
+
 
 if __name__ == '__main__':
     pass

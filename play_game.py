@@ -16,7 +16,7 @@ print bombs
 ''' 
 
 grid = Grid()
-
+grid.create_board()
 bombs, neighbors = grid.return_bombs()
 
 n_dict = grid.get_neighbor_dict()

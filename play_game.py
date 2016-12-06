@@ -1,9 +1,8 @@
-from pysweeper import Cell, Grid
-import curses
-import curses.textpad
-import time
+from pysweeper import Cell, Grid, Game
+# import curses
+# import curses.textpad
+# import time
 
-print "Welcome to the first game of the rest of your life"
 #print "Pres"
 '''
 rows = raw_input("How many rows would you like? (Press enter for 8) ")
@@ -15,26 +14,15 @@ print cols
 print bombs
 ''' 
 
-grid = Grid()
-grid.create_board()
-bombs, neighbors = grid.return_bombs()
+game = Game()
+game.create_game()
 
-n_dict = grid.get_neighbor_dict()
+#n_dict = grid.get_neighbor_dict()
 
-''' 
-for i, j in n_dict.iteritems():
-    print i, j
-'''
-#for i in bombs:
-#    print i
-#print "---------"
+#game.draw_screen()
+game.play_game()
 
-for j in neighbors:
-    print "+-"*8+"+"
-    print "|" + "|".join([str(i) for i in j]) + "|"
-    
-print "+-"*8+"+"
-window = curses.initscr()
-curses.endwin()
+#window = curses.initscr()
+#curses.endwin()
 
 

@@ -1,5 +1,6 @@
 import random
 
+
 class Cell(object):
     
     def __init__(self):
@@ -42,7 +43,6 @@ class Grid(object):
         self.bombs_not_planted = bombs
         self.neighbor_dict = {}
 
-
     def populate_grid(self):
         self.grid_matrix = []
         for row_position in xrange(self.row_size):
@@ -61,7 +61,6 @@ class Grid(object):
                     self.bombs_not_planted -= 1
 
         self.all_neighbors()
-        print "line 64"
     
     def get_cell(self, row, col):
         return self.grid_matrix[row][col]
@@ -82,12 +81,12 @@ class Grid(object):
             for n_col in xrange(col-1, col+2):
                 if n_row in range(self.row_size) and\
                     n_col in range(self.col_size) and not\
-                    (n_row == row and n_col == col):
+                        (n_row == row and n_col == col):
                     self.neighbor_dict[(row, col)].append((n_row, n_col))
 
     def calculate_neighbors(self, row, col):
         neighbor_counter = 0 
-        for n_cell in self.neighbor_dict[(row,col)]:
+        for n_cell in self.neighbor_dict[(row, col)]:
             if self.grid_matrix[n_cell[0]][n_cell[1]].bomb_check():
                 neighbor_counter += 1
         self.grid_matrix[row][col].set_neighbors(neighbor_counter)
@@ -95,15 +94,13 @@ class Grid(object):
     def create_board(self):
         self.populate_grid()
         for r in xrange(self.row_size):
-            #print "loop", r
             for c in xrange(self.col_size):
-                #print "loop", c
-                self.create_neighbors(r,c) 
+                self.create_neighbors(r, c) 
 
     def return_bombs(self):
         bomb_matrix = [[False for r in xrange(self.row_size)] for c in xrange(self.col_size)]
         n_matrix = [[False for r in xrange(self.row_size)] for c in xrange(self.col_size)]
-        for i  in xrange(self.row_size):
+        for i in xrange(self.row_size):
             for j in xrange(self.col_size):
                 bomb_matrix[i][j] = self.grid_matrix[i][j].bomb_check()
                 n_matrix[i][j] = self.grid_matrix[i][j].get_neighbors()
@@ -116,9 +113,9 @@ class Grid(object):
             return "end"
         self.grid_matrix[row][col].reveal()
         if self.grid_matrix[row][col].get_neighbors() == 0:
-            for r,c in self.neighbor_dict[(row, col)]:
+            for r, c in self.neighbor_dict[(row, col)]:
                 if not self.grid_matrix[r][c].is_revealed():
-                    self.reveal_cell(r,c,False)
+                    self.reveal_cell(r, c, False)
     
     def draw_grid(self):
         # displays each cells status
@@ -157,6 +154,7 @@ class Grid(object):
         else:
             return False
 
+
 class Game(object):
     def __init__(self):
         pass
@@ -167,9 +165,10 @@ class Game(object):
         self.bombs = bombs
         self.finished = False
         
+        # Create Grid object
         self.grid = Grid(row, col, bombs)
 
-
+        # Populate the grid 
         self.grid.create_board()
 
     def draw_screen(self):
@@ -182,8 +181,7 @@ class Game(object):
         print x_axis
         print " "+"+-"*self.row+"+"
         for ix, row in enumerate(screen):
-            s = "|".join([str(i) if i != '0' else " " for i in
-                row])
+            s = "|".join([str(i) if i != '0' else " " for i in row])
             print "{}|{}|{}".format(ix, s, ix)
             print " "+"+-"*self.row+"+"
         print x_axis
@@ -202,21 +200,18 @@ class Game(object):
             if state == "end":
                 self.finished = True
 
-
     def play_game(self):
         print "Welcome to the first game of the rest of your life"
-        #first time setup
+        # first time setup
         self.draw_screen()
         print "Start by clicking which cell?" 
         row = int(raw_input("Which cell row?(Starting at 0): "))
         col = int(raw_input("Which cell column?(Starting at 0): "))
-#        self.grid.create_neighbors()
         self.grid.plant_bombs(row, col)
-#        self.grid.calculate_neighbors()
         self.grid.reveal_cell(row, col, True)
 
-        #main game loop
-        while not self.finished: #fix
+        # main game loop
+        while not self.finished:
             self.draw_screen()
             self.control()
 
@@ -224,6 +219,7 @@ class Game(object):
             print "YOU WIN!!!"
         else:
             print "YOU GOT BOMBED!!!"
+
 
 if __name__ == '__main__':
     pass
